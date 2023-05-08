@@ -79,8 +79,8 @@ Widget buildMenuItms(BuildContext context) => Wrap(
   ],
 );
 
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({super.key});
+class CustomNavigationDrawer extends StatelessWidget {
+  const CustomNavigationDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

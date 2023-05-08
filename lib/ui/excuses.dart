@@ -1,9 +1,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:studentapp/constants.dart';
+import 'package:studentapp/utils/firestore/read.dart';
 import 'package:studentapp/widgets/navigation_drawer.dart';
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+import '../models/course.dart';
+
+List<Course> courseList = [];
 
 class Excuses extends StatefulWidget {
   const Excuses({super.key});
@@ -16,6 +20,7 @@ class ExcusesState extends State<Excuses> {
  
 final textController = TextEditingController();
 final NoteController = TextEditingController();
+bool isLoading = false;
 
  // file picker
 
@@ -32,129 +37,155 @@ final NoteController = TextEditingController();
   }
  }
 
+ @override
+ void initState() {
+   super.initState();
+   Future(()async{
+     startLoading();
+     courseList = await getAllCourses();
+     stopLoading();
+   });
+ }
+
+ void startLoading() {
+   setState(() {
+     isLoading = true;
+   });
+ }
+
+ void stopLoading() {
+   setState(() {
+     isLoading = false;
+   });
+ }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Excuses'),
-        backgroundColor: kAppColor,
-      ),
-      //backgroundColor: Colors.grey,
-      drawer: const NavigationDrawer() ,
-      //Body
-      body: Column(
-        children: [
-          SizedBox(height: 20,),
-          Center(
-              child: Text(
-                'Choose Your Course',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Excuses'),
+          backgroundColor: kAppColor,
+        ),
+        //backgroundColor: Colors.grey,
+        drawer: const CustomNavigationDrawer() ,
+        //Body
+        body: Column(
+          children: [
+            SizedBox(height: 20,),
+            Center(
+                child: Text(
+                  'Choose Your Course',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-            ),
-            //dropDown list
-            
-            SizedBox(height: 10,),
-            DropdownButtonExample(),
-            SizedBox(height: 80,),
-            // import text field
+              ),
+              //dropDown list
 
-            Padding(
-              padding: const EdgeInsets.fromLTRB(50, 25, 70, 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Import Your Excuses File',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+              SizedBox(height: 10,),
+              DropdownButtonExample(),
+              SizedBox(height: 80,),
+              // import text field
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 25, 70, 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Import Your Excuses File',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      ),
+                    SizedBox(height: 15,),
+                    // Import text filed
+                    TextField(
+
+                      enabled: true,
+                      controller: textController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Drag or Import',
+                        suffixIcon: IconButton(
+                          onPressed: (){
+                            //Clearing Textfield
+                            textController.clear();
+                          },
+                          icon: Icon(Icons.clear),
+                        ),
+                        ),
                     ),
-                    ),
-                  SizedBox(height: 15,),
-                  // Import text filed
-                  TextField(
-                    
-                    enabled: true,
-                    controller: textController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Drag or Import',
-                      suffixIcon: IconButton(
-                        onPressed: (){
-                          //Clearing Textfield 
-                          textController.clear();
+                    // import button
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 40, 20, 10),
+                      child: MaterialButton(
+                        onPressed: () {
+                          // file picker
+                          openFiles();
                         },
-                        icon: Icon(Icons.clear),
+                        color: kAppColor,
+                        child: Text(
+                          'Import',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20
+                          ),
+                          ),
                       ),
-                      ),
-                  ),
-                  // import button
+                    ),
+                  ],
+                ),
+              ),
+              // Add Note
 
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 40, 20, 10),
-                    child: MaterialButton(
-                      onPressed: () {
-                        // file picker
-                        openFiles();
-                      },
-                      color: kAppColor,
-                      child: Text(
-                        'Import',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20
-                        ),
-                        ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(40, 150, 60, 10),
+                child: Column(
+                  children: [
+                  TextField(
+                    controller: NoteController,
+                    decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Add a note//',
                     ),
                   ),
                 ],
-              ),
-            ),
-            // Add Note
-
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 150, 60, 10),
-              child: Column(
-                children: [
-                TextField(
-                  controller: NoteController,
-                  decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Add a note//',
-                  ),
                 ),
-              ],
               ),
-            ),
-            
-            // Submit button
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 50, 20, 50),
-                child: SizedBox(
-                  height:50 , width:1000 ,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: 
-                      MaterialStatePropertyAll<Color>(Color.fromARGB(255, 126, 13, 13)),
+              // Submit button
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 50, 20, 50),
+                  child: SizedBox(
+                    height:50 , width:1000 ,
+                    child: ElevatedButton(
+                      onPressed: (){
+
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStatePropertyAll<Color>(Color.fromARGB(255, 126, 13, 13)),
+                      ),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        ),
                     ),
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                      ),
                   ),
                 ),
-              ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -170,7 +201,7 @@ class DropdownButtonExample extends StatefulWidget {
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  String dropdownValue = list.first;
+  String? dropdownValue = null;
 
   @override
   Widget build(BuildContext context) {
@@ -197,10 +228,10 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
               dropdownValue = value!;
             });
           },
-          items: list.map<DropdownMenuItem<String>>((String value) {
+          items: courseList.map<DropdownMenuItem<String>>((Course course) {
             return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
+              value: course.id,
+              child: Text(course.code??""),
             );
           }).toList(),
         ),

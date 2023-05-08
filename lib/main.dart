@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studentapp/constants.dart';
 import 'package:studentapp/utils/ml_service.dart';
-
 import 'ui/excuses.dart';
 import 'ui/login.dart';
 import 'ui/home/home.dart';
@@ -29,7 +28,6 @@ void main() async {
       '/excuses':(context) => Excuses(),
       '/getMoreStudentInfo' : (context) => GetMoreStudentInfo(),
       '/getFaceId' : (context) => GetFaceId()
-
     },
   ));
 }

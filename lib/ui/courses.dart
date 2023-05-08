@@ -60,7 +60,7 @@ class CoursesState extends State<Courses> {
         title: Text('Courses'),
         backgroundColor: Color.fromARGB(255, 126, 13, 13),
       ),
-      drawer: const NavigationDrawer() ,
+      drawer: const CustomNavigationDrawer() ,
 
       body: ModalProgressHUD(
         inAsyncCall: isLoading,
