@@ -10,7 +10,7 @@ import "package:studentapp/ui/getMoreStudentInfo/getMoreStudentInfo.dart";
 import "package:path/path.dart" as path;
 import '../ui/home/home.dart';
 import 'package:studentapp/data/user_data.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 
 Future<void> loginUser({ required String email,  required String password, required BuildContext context}) async {
   try {
@@ -28,15 +28,10 @@ Future<void> loginUser({ required String email,  required String password, requi
     // replace this print statement with the code to navigate to the next screen
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
-      Fluttertoast.showToast(msg: "No user found for that email.");
-
       debugPrint('No user found for that email.');
     } else if (e.code == 'wrong-password') {
-      Fluttertoast.showToast(msg: "Wrong password provided for that user.");
       debugPrint('Wrong password provided for that user.');
     } else {
-      Fluttertoast.showToast(msg: "Error: ${e.message}");
-
       debugPrint('Error: ${e.message}');
     }
   } catch (e) {
@@ -170,8 +165,6 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
     debugPrint("Successfully saved user data");
     return true;
   } catch(e) {
-    debugPrint("$e");
-    Fluttertoast.showToast(msg: "Something went wrong");
     debugPrint("Failed to save user data");
     debugPrint("$e");
     return false;
@@ -182,17 +175,4 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
 Future<void> signOut(BuildContext context) async{
   FirebaseAuth.instance.signOut();
   Navigator.pushNamed(context, '/');
-}
-
-Future<void> forgotPassword(String email) async{
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  FirebaseAuth auth = FirebaseAuth.instance;
-  try {
-    await auth.sendPasswordResetEmail(email: email);
-    Fluttertoast.showToast(msg: "Password reset email sent to $email");
-  }catch(e) {
-    Fluttertoast.showToast(msg: "$e");
-    debugPrint("$e");
-  }
-
 }

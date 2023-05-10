@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:studentapp/utils/auth.dart' as auth;
+import 'package:studentapp/utils/auth.dart';
 
 
 class login extends StatefulWidget {
@@ -27,12 +27,6 @@ FocusNode inputNode = FocusNode();
 void openKeyboard(){
   FocusScope.of(context).requestFocus(inputNode);
 }
-
-  Future<void> forgotPassword() async{
-    startLoading();
-    await auth.forgotPassword(usernameController.text);
-    stopLoading();
-  }
 
 
   void startLoading() {
@@ -68,43 +62,23 @@ void openKeyboard(){
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 150,),
                     Container(
                      child: const Image( image: AssetImage('images/UoB.png'), width: 170, height: 170 ),
                         ),
                      //),
                     //),
                   //Hello again
-                  Column(
-                    children: [
-                      /*Row(
-                        children: [
-                          const Center(
-                            child: Text(
-                              'University Of Bahrain',
-                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white,
-                                ),
-                              ),
-                          ),
-                        ],
-                      ),*/
-                      SizedBox(height: 20,),
-                      Center(
-                            child: Text(
-                              'Student Attendence System',
-                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                color: Colors.white,
-                                ),
-                              ),
-                          ),
-                    ],
+                  const Center(
+                    child: Text(
+                      'University Of Bahrain',
+                       style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.white,
+                        ),
+                      ),
                   ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextField(
@@ -163,7 +137,7 @@ void openKeyboard(){
                       debugPrint("Logging user in");
                       startLoading();
                       try{
-                        await auth.loginUser(email: usernameController.text, password: passwordController.text, context: context);
+                        await loginUser(email: usernameController.text, password: passwordController.text, context: context);
                       }catch(e) {
                         debugPrint("$e");
                       }
@@ -181,16 +155,7 @@ void openKeyboard(){
                       ),
                       ),
                    ),
-                    ),
-                    SizedBox(height: 20),
-                    TextButton(
-                        onPressed: forgotPassword,
-                        child: Text(
-                            "Forgot password?",
-                            style: TextStyle(
-                              color: Colors.white,
-                            )
-                        )),
+                    )
                 ]
                 ),
               ),

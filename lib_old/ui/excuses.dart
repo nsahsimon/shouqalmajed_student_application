@@ -2,12 +2,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:studentapp/constants.dart';
+import 'package:studentapp/utils/firestore/read.dart';
 import 'package:studentapp/widgets/navigation_drawer.dart';
 
 import '../models/course.dart';
-import '../utils/firestore/read.dart';
 
-List<Course> courseList =[];
+List<Course> courseList = [];
 
 class Excuses extends StatefulWidget {
   const Excuses({super.key});
@@ -17,11 +17,10 @@ class Excuses extends StatefulWidget {
 }
 
 class ExcusesState extends State<Excuses> {
-
-  bool isLoading = false;
  
 final textController = TextEditingController();
 final NoteController = TextEditingController();
+bool isLoading = false;
 
  // file picker
 
@@ -38,8 +37,6 @@ final NoteController = TextEditingController();
   }
  }
 
-
-
  @override
  void initState() {
    super.initState();
@@ -50,17 +47,18 @@ final NoteController = TextEditingController();
    });
  }
 
-void startLoading() {
-  setState(() {
-    isLoading = true;
-  });
-}
+ void startLoading() {
+   setState(() {
+     isLoading = true;
+   });
+ }
 
-void stopLoading() {
-  setState(() {
-    isLoading = false;
-  });
-}
+ void stopLoading() {
+   setState(() {
+     isLoading = false;
+   });
+ }
+
 
 
   @override
@@ -166,7 +164,7 @@ void stopLoading() {
               // Submit button
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 50, 20, 5),
+                  padding: const EdgeInsets.fromLTRB(30, 50, 20, 50),
                   child: SizedBox(
                     height:50 , width:1000 ,
                     child: ElevatedButton(
@@ -232,10 +230,10 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
           },
           items: courseList.map<DropdownMenuItem<String>>((Course course) {
             return DropdownMenuItem<String>(
-            value: course.id,
-            child: Text(course.code??""),
+              value: course.id,
+              child: Text(course.code??""),
             );
-            }).toList(),
+          }).toList(),
         ),
       ),
     );

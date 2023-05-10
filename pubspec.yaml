@@ -50,6 +50,7 @@ dependencies:
   google_mlkit_face_detection: ^0.5.0
   flutter_svg:
   image:
+  fluttertoast: ^8.2.1
 
 dev_dependencies:
   flutter_test:
