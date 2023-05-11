@@ -94,12 +94,13 @@ void openKeyboard(){
                       SizedBox(height: 20,),
                       Center(
                             child: Text(
-                              'Student Attendence System',
+                              'Student Attendance System',
                                style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 25,
                                 color: Colors.white,
                                 ),
+                              textAlign: TextAlign.center,
                               ),
                           ),
                     ],

@@ -29,7 +29,6 @@ void main() async {
       '/excuses':(context) => Excuses(),
       '/getMoreStudentInfo' : (context) => GetMoreStudentInfo(),
       '/getFaceId' : (context) => GetFaceId()
-
     },
   ));
 }
